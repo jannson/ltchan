@@ -17,7 +17,7 @@ typedef struct Channel Channel;
 // Create a channel. The channel will be filled with elements of size
 // 'elemsize' and will hold at most 'buffersize' elements before blocking.
 // (0 means block immediately for processing.)
-Channel*	chancreate(size_t elemsize, int buffersize);
+Channel*	chancreate(size_t elemsize, unsigned int buffersize);
 
 // Close a channel. No more elements will be accepted.
 void		chanclose(Channel *c);

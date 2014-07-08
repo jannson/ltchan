@@ -1,10 +1,17 @@
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
+
 #include "ltchan.h"
 
-typedef struct {
+struct _lt_ch_list;
+typedef struct _lt_ch_list _lt_ch_list;
+
+struct _lt_ch_list {
 	_lt_ch_list		*prev;
 	void*			elem;
 	_lt_ch_list		*next;
-} _lt_ch_list;
+};
 
 struct Channel
 {
@@ -61,6 +68,8 @@ chanfree(Channel *c)
 	free(c->rcond);
 	free(c->wcond);
 	free(c);
+
+	return 1;
 }
 
 int
