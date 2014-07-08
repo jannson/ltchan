@@ -47,6 +47,7 @@ chanclose(Channel *c)
 {
 	c->closed = 1;
 	lthread_cond_broadcast(c->rcond);
+	lthread_cond_broadcast(c->wcond);
 	// ^ anything waiting on a channel must now realise it's closed
 }
 
@@ -157,6 +158,10 @@ _chansend(Channel *c, void *v, int block)
 			}
 		}
 	}
+	
+	// check again in case we close the channel
+	if (c->closed)
+		return LTCHAN_CLOSED;
 
 	_lt_ch_list *elem = malloc(sizeof(_lt_ch_list));
 	elem->prev = c->tail;
