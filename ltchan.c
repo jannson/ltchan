@@ -75,10 +75,12 @@ chanfree(Channel *c)
 int
 channbrecv(Channel *c, void *v)
 {
-	if (c->closed)
-		return LTCHAN_CLOSED;
-	if (c->head == NULL)
-		return LTCHAN_NONE;
+	if (c->head == NULL) {
+		if (c->closed)
+			return LTCHAN_CLOSED;
+		else
+			return LTCHAN_NONE;
+	}
 
 	_lt_ch_list *head = c->head;
 
