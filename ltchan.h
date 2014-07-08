@@ -47,6 +47,19 @@ int				chansend(Channel *c, void *v);
 int				chansendp(Channel *c, void *v);
 int				chansendul(Channel *c, unsigned long v);
 
+// Locks... Technically lthread's cooperative scheduling means we don't need
+// us to have locks, but have some anyway.
+
+struct LtLock;
+typedef struct LtLock LtLock;
+
+LtLock*			ltlockcreate();
+
+void			ltlock(LtLock *l);
+int				ltchecklock(LtLock *l);
+void			ltunlock(LtLock *l);
+
+
 #ifdef __cplusplus
 }
 #endif

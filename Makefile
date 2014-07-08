@@ -10,7 +10,8 @@ PREFIX=/usr/local
 all: $(SHARED) $(STATIC)
 
 OFILES=\
-	ltchan.o
+	ltchan.o\
+	lock.o\
 
 CC=gcc
 CFLAGS=-Wall -I. -ggdb -llthread

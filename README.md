@@ -51,3 +51,15 @@ int				chansend(Channel *c, void *v);
 int				chansendp(Channel *c, void *v);
 int				chansendul(Channel *c, unsigned long v);
 ```
+
+### Locks:
+
+Because you thought that cooperative scheduling sucked:
+
+```c
+LtLock*			ltlockcreate();
+
+void			ltlock(LtLock *l);
+int				ltchecklock(LtLock *l);
+void			ltunlock(LtLock *l);
+```
