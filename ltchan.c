@@ -158,18 +158,24 @@ _chansend(Channel *c, void *v, int block)
 	// special condition for 0
 	// if the buffer size is 0 (synchronous), then we will go over the 
 	// the buffer limit regardless... (and block later until chan receieves it)
-	if (c->bufsize != 0)
+
+	while (1)
 	{
-		while (c->cursize >= c->bufsize)
-		{
-			if (block) {
-				lthread_cond_wait(c->wcond, 0);
-			} else {
-				return LTCHAN_FULL;
-			}
+		int cond = (c->cursize >= c->bufsize);
+		if (c->bufsize == 0)
+			cond = (c->cursize > c->bufsize);
+
+		if (!cond) {
+			break;
+		}
+
+		if (block) {
+			lthread_cond_wait(c->wcond, 0);
+		} else {
+			return LTCHAN_FULL;
 		}
 	}
-	
+
 	// check again in case we close the channel
 	if (c->closed)
 		return LTCHAN_CLOSED;
@@ -194,8 +200,8 @@ _chansend(Channel *c, void *v, int block)
 	lthread_cond_broadcast(c->rcond);
 
 	// if buffer is overfull and we're blocking, block
-	// (special condition for 0)
-	if (block)
+	// (special condition for 0: block always)
+	if (block || c->bufsize == 0)
 	{
 		while (c->cursize > c->bufsize)
 		{
