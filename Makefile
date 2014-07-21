@@ -7,7 +7,7 @@ STATIC=$(NAME).a
 DESTDIR=
 PREFIX=/usr/local
 
-all: $(SHARED) $(STATIC)
+all: $(STATIC)
 
 OFILES=\
 	ltchan.o\
@@ -17,10 +17,7 @@ CC=gcc
 CFLAGS=-Wall -I. -ggdb -llthread
 
 %.o: %.c
-	$(CC) $(CFLAGS) -fPIC -c $*.c
-
-$(SHARED): $(OFILES)
-	$(CC) $(CFLAGS) -shared -o $(SHARED) $(OFILES)
+	$(CC) $(CFLAGS) -c $*.c
 
 $(STATIC): $(OFILES)
 	ar rcs $(STATIC) $(OFILES)
@@ -28,8 +25,7 @@ $(STATIC): $(OFILES)
 clean:
 	rm -f *.o $(SHARED) $(STATIC)
 
-install: $(SHARED) $(STATIC)
-	cp $(SHARED) $(DESTDIR)$(PREFIX)/lib
+install: $(STATIC)
 	cp $(STATIC) $(DESTDIR)$(PREFIX)/lib
 	cp *.h $(DESTDIR)$(PREFIX)/include
 
